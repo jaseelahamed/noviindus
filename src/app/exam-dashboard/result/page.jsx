@@ -8,7 +8,7 @@ import { Copy, CheckSquare, XSquare, HelpCircle } from "lucide-react";
 export default function ResultPage() {
   const { result, questions } = useAppSelector((s) => s.exam); 
   const router = useRouter();
-console.log(result,"resultresultresultresult")
+
   if (!result) return <div className="p-8 text-center text-gray-600">No result found. Please submit a test first.</div>;
 
   const totalQuestionsCount = questions ? questions.length : 100; 
