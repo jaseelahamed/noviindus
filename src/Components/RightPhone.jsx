@@ -2,6 +2,7 @@
 
 import { InputAdornment, TextField } from "@mui/material";
 import React from "react";
+import Flag from "react-world-flags"; // Import the flag library
 
 export default function RightPhone({
   mobile,
@@ -25,16 +26,43 @@ export default function RightPhone({
           <TextField
             className="w-full"
             label="Phone number"
+            variant="outlined"
             value={mobile}
             onChange={(e) => setMobile(e.target.value)}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '12px',
+                '& fieldset': {
+                  borderColor: '#D1D5DB', 
+                },
+                // Add padding to ensure the flag doesn't touch the border
+                paddingLeft: '12px', 
+              },
+              '& .MuiInputLabel-root': {
+                color: '#64748B',
+              },
+              '& .MuiInputBase-input': {
+                fontSize: '1.25rem',
+                fontWeight: '500',
+                color: '#1C3141',
+                paddingLeft: '8px',
+              }
+            }}
             slotProps={{
               input: {
                 startAdornment: (
-                  <InputAdornment position="start">+91</InputAdornment>
+                  <InputAdornment position="start" sx={{ gap: 1.5, opacity: 1 }}>
+                    {/* Realistic Indian Flag */}
+                    <div style={{ width: '28px', display: 'flex', alignItems: 'center' }}>
+                      <Flag code="IN" style={{ borderRadius: '2px' }} />
+                    </div>
+                    <span className="text-xl text-[#1C3141] font-medium">+91</span>
+                  </InputAdornment>
                 ),
               },
             }}
           />
+          
           <p className="mt-4 text-[#64748B] flex flex-wrap items-center" 
             style={{ 
               fontFamily: 'Inter, sans-serif', 
@@ -44,13 +72,7 @@ export default function RightPhone({
               letterSpacing: '0px' 
             }}>
             By tapping Get started, you agree to the&nbsp;
-            <span className="text-[#1C3141] cursor-pointer hover:underline"
-                  style={{ 
-                    fontFamily: 'Inter, sans-serif', 
-                    fontWeight: 400, 
-                    fontSize: '11.74px', 
-                    lineHeight: '16px' 
-                  }}>
+            <span className="text-[#1C3141] cursor-pointer hover:underline font-medium">
               Terms & Conditions
             </span>
           </p>
