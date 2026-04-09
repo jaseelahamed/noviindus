@@ -26,16 +26,19 @@ export default function PassageModal() {
         >
           ×
         </button>
-
-        <h3 className="text-lg font-semibold mb-3">Comprehensive Passage</h3>
-        <p className="text-slate-700 whitespace-pre-wrap">{paragraph}</p>
+        <h3 className="font-['Inter'] font-medium text-[16px] leading-[100%] tracking-[0%] text-[#1C3141] flex items-center mb-3">
+          Comprehensive Paragraph
+        </h3>
+        <p className="font-['Inter'] font-medium text-[18px] leading-[100%] tracking-[0%] text-[#1C3141] whitespace-pre-wrap">
+          {paragraph}
+        </p>
         <div className="flex justify-end mt-4">
-          <button
-            className="px-4 py-3 bg-[#177A9C] text-white text-sm rounded"
-            onClick={() => setOpen(false)}
-          >
-            Minimize
-          </button>
+         <button
+  onClick={() => setOpen(false)}
+  className="w-[361px] h-[48px] rounded-[10px] bg-[#1C3141] text-[#ffffff] font-medium transition-opacity opacity-100 flex items-center justify-center"
+>
+  Minimize
+</button>
         </div>
       </div>
     </div>

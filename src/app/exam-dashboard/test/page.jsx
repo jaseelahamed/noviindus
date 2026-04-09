@@ -3,7 +3,9 @@
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
 import {
+  decrementTimer,
   fetchQuestions,
+  markCurrentForReview,
   setCurrentIndex,
   selectOption,
   submitAnswers,
@@ -20,12 +22,22 @@ export default function TestPage() {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const { questions, currentIndex, answers, remainingSeconds } =
+  const { questions, currentIndex, answers, remainingSeconds, loading, error } =
     useAppSelector((s) => s.exam);
 
   useEffect(() => {
     dispatch(fetchQuestions());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (remainingSeconds <= 0) return undefined;
+
+    const timer = window.setInterval(() => {
+      dispatch(decrementTimer());
+    }, 1000);
+
+    return () => window.clearInterval(timer);
+  }, [dispatch, remainingSeconds]);
 
   const handleSubmitExam = async () => {
     const answerArray = Object.values(answers); // NOW CORRECT SHAPE
@@ -40,53 +52,80 @@ export default function TestPage() {
   };
 
   const currentQuestion = questions[currentIndex];
+  const openSubmitModal = () => {
+    window.dispatchEvent(new Event("openSubmit"));
+  };
+
+  const handleNext = () => {
+    if (currentIndex === questions.length - 1) {
+      openSubmitModal();
+      return;
+    }
+
+    dispatch(setCurrentIndex(Math.min(currentIndex + 1, questions.length - 1)));
+  };
+
+  const handlePrev = () => {
+    dispatch(setCurrentIndex(Math.max(currentIndex - 1, 0)));
+  };
 
   return (
-    <div className="min-h-screen p-6">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold">Exam Test</h2>
-          <Timer remainingSeconds={remainingSeconds} />
-        </div>
+    <div className="min-h-screen bg-[#F4FAFD] p-4 sm:p-5">
+      <div className="mx-auto max-w-[1280px]">
+        {loading && !questions.length ? (
+          <div className="rounded-xl border border-[#D9E5EE] bg-white p-6 text-sm text-[#475467]">
+            Loading questions...
+          </div>
+        ) : null}
 
-        <div className="mt-6 grid grid-cols-12 gap-4">
-          <div className="col-span-8">
+        {error ? (
+          <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+            {error}
+          </div>
+        ) : null}
+
+        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_360px]">
+          <div className="min-w-0">
             {currentQuestion ? (
               <QuestionPanel
                 question={currentQuestion}
+                questionNumber={currentIndex + 1}
+                totalQuestions={questions.length}
                 onSelect={(qid, oid) =>
                   dispatch(selectOption({ question_id: qid, option_id: oid }))
                 }
-                onNext={() =>
-                  dispatch(
-                    setCurrentIndex(Math.min(currentIndex + 1, questions.length - 1))
-                  )
-                }
-                onPrev={() =>
-                  dispatch(setCurrentIndex(Math.max(currentIndex - 1, 0)))
-                }
+                onNext={handleNext}
+                onPrev={handlePrev}
+                onMarkForReview={() => dispatch(markCurrentForReview())}
               />
             ) : (
-              "No questions found"
+              <div className="rounded-xl border border-[#D9E5EE] bg-white p-6 text-sm text-[#475467]">
+                No questions found.
+              </div>
             )}
           </div>
 
-          <div className="col-span-4">
-            <div className="bg-white p-4 rounded shadow">
-              <QuestionGrid />
-              <div className="mt-4">
-                <button
-                  onClick={handleSubmitExam}
-                  className="w-full bg-[#1C3141] text-white py-2 rounded"
-                >
-                  Submit Test
-                </button>
-              </div>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between rounded-xl border border-[#D9E5EE] bg-white px-4 py-3 shadow-[0_2px_8px_rgba(28,49,65,0.06)]">
+              <span className="text-sm font-medium text-[#1C3141]">Remaining Time:</span>
+              <Timer remainingSeconds={remainingSeconds} />
             </div>
+
+            <div>
+              <QuestionGrid />
+            </div>
+
+            <button
+              onClick={openSubmitModal}
+              className="w-full rounded-lg bg-[#1C3141] py-3 text-sm font-medium text-white"
+            >
+              Submit Test
+            </button>
           </div>
         </div>
 
         <PassageModal />
+        <SubmitModal onSubmit={handleSubmitExam} />
       </div>
     </div>
   );
