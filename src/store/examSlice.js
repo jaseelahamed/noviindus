@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "@/lib/axios";
 
+const DEFAULT_EXAM_DURATION_SECONDS = 100 * 60;
+
 const STATUS = {
   NOT_VISITED: "not_visited",
   NOT_ANSWERED: "not_answered",
@@ -165,7 +167,7 @@ const examSlice = createSlice({
           action.payload.duration_seconds ||
           (action.payload.duration_minutes
             ? Number(action.payload.duration_minutes) * 60
-            : 0);
+            : DEFAULT_EXAM_DURATION_SECONDS);
 
         state.loading = false;
         state.questions = questions;
@@ -175,7 +177,7 @@ const examSlice = createSlice({
         state.statusMap = buildInitialStatusMap(questions);
         state.totalTimeSeconds = durationSeconds;
         state.remainingSeconds = durationSeconds;
-        state.timerRunning = durationSeconds > 0;
+        state.timerRunning = true;
 
         markCurrentQuestionVisited(state);
       })

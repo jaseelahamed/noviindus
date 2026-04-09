@@ -33,7 +33,7 @@ export default function QuestionPanel({
   };
 
   return (
-    <div className="rounded-xl border border-[#D9E5EE] bg-white shadow-[0_2px_8px_rgba(28,49,65,0.06)]">
+    <div className="rounded-xl border border-[#D9E5EE] shadow-[0_2px_8px_rgba(28,49,65,0.06)]">
       <div className="flex items-center justify-between rounded-t-xl border-b border-[#E3EDF4] bg-[#EEF5FA] px-4 py-2">
         <h2 className="text-base font-medium text-[#1C3141]">
           Ancient Indian History MCQ

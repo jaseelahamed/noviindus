@@ -3,11 +3,10 @@
 import React from "react";
 import { useAppSelector, useAppDispatch } from "@/hooks/reduxHooks";
 import { setCurrentIndex, STATUS } from "@/store/examSlice";
-
+import Timer from "./Timer";
 export default function QuestionGrid() {
   const dispatch = useAppDispatch();
-  const { questions, statusMap, currentIndex } = useAppSelector((s) => s.exam);
-
+  const { questions, statusMap, currentIndex, remainingSeconds } = useAppSelector((s) => s.exam);
   const getQuestionId = (question) => question?.question_id ?? question?.id;
 
   const getColor = (status) => {
@@ -36,9 +35,13 @@ export default function QuestionGrid() {
   ];
 
   return (
-    <div className="rounded-xl border border-[#D9E5EE] bg-white p-4 shadow-[0_2px_8px_rgba(28,49,65,0.06)]">
+    <div className="rounded-xl border border-[#D9E5EE] p-4 shadow-[0_2px_8px_rgba(28,49,65,0.06)]">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-sm font-medium text-[#1C3141]">Question No. Sheet:</h3>
+        <h3 className="text-sm font-small text-[#1C3141]">Question No. Sheet:</h3>
+        <div className="flex items-center justify-between rounded-xl px-4 py-3 shadow-[0_2px_8px_rgba(28,49,65,0.06)]">
+                      <span className="text-sm  font-small text-[#1C3141]">Remaining Time:</span>
+                      <Timer remainingSeconds={remainingSeconds} />
+                    </div>
       </div>
 
       <div className="grid grid-cols-5 gap-2 sm:grid-cols-5 lg:grid-cols-5">

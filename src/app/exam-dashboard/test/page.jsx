@@ -15,7 +15,7 @@ import QuestionPanel from "./components/QuestionPanel";
 import QuestionGrid from "./components/QuestionGrid";
 import Timer from "./components/Timer";
 import PassageModal from "./components/PassageModal";
-import SubmitModal from "./components/SubmitModal";
+import SubmitSummaryModal from "./components/SubmitSummaryModal";
 import { useRouter } from "next/navigation";
 
 export default function TestPage() {
@@ -84,8 +84,8 @@ export default function TestPage() {
           </div>
         ) : null}
 
-        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_360px]">
-          <div className="min-w-0">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
+          <div className="min-w-0 lg:col-span-7">
             {currentQuestion ? (
               <QuestionPanel
                 question={currentQuestion}
@@ -105,27 +105,23 @@ export default function TestPage() {
             )}
           </div>
 
-          <div className="space-y-4">
-            <div className="flex items-center justify-between rounded-xl border border-[#D9E5EE] bg-white px-4 py-3 shadow-[0_2px_8px_rgba(28,49,65,0.06)]">
-              <span className="text-sm font-medium text-[#1C3141]">Remaining Time:</span>
-              <Timer remainingSeconds={remainingSeconds} />
-            </div>
+          <div className="space-y-4 lg:col-span-5">
+          
 
             <div>
               <QuestionGrid />
             </div>
 
-            <button
+            {/* <button
               onClick={openSubmitModal}
               className="w-full rounded-lg bg-[#1C3141] py-3 text-sm font-medium text-white"
             >
               Submit Test
-            </button>
+            </button> */}
           </div>
         </div>
-
         <PassageModal />
-        <SubmitModal onSubmit={handleSubmitExam} />
+        <SubmitSummaryModal onSubmit={handleSubmitExam} />
       </div>
     </div>
   );
