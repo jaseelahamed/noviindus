@@ -12,9 +12,9 @@ export default function ExamLanding() {
       <div className="max-w-3xl mx-auto text-center">
         
         {/* TITLE */}
-        <h2 className="text-xl sm:text-2xl font-semibold mt-4 sm:mt-6">
-          Ancient Indian History — Level 1
-        </h2>
+       <h2 className="mt-4 font-['Inter'] text-[26px] font-medium leading-[144%] tracking-[0] text-[#1C3141] sm:mt-6">
+         Ancient Indian History MCQ
+       </h2>
 
         {/* STATS BOX — RESPONSIVE GRID */}
         <div className="

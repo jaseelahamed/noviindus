@@ -5,12 +5,28 @@ import api from "@/lib/axios";
 
 const initialState = {
   loading: false,
-  loadingAuth: true,      
+  loadingAuth: true,
   access_token: null,
   refresh_token: null,
+  token_type: "bearer",
   user: null,
   mobileForFlow: null,
   error: null,
+};
+
+const persistTokens = (state, data) => {
+  if (!data?.access_token) return;
+
+  state.access_token = data.access_token;
+  state.token_type = data.token_type || "bearer";
+
+  localStorage.setItem("access_token", data.access_token);
+  localStorage.setItem("token_type", state.token_type);
+
+  if (data.refresh_token) {
+    state.refresh_token = data.refresh_token;
+    localStorage.setItem("refresh_token", data.refresh_token);
+  }
 };
 
 
@@ -67,14 +83,18 @@ const authSlice = createSlice({
     logout(state) {
       state.access_token = null;
       state.refresh_token = null;
+      state.token_type = "bearer";
       state.user = null;
-      localStorage.clear();
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+      localStorage.removeItem("token_type");
     },
 
     loadTokens(state) {
       state.access_token = localStorage.getItem("access_token");
       state.refresh_token = localStorage.getItem("refresh_token");
-      state.loadingAuth = false;   // <--- TOKEN LOAD COMPLETE
+      state.token_type = localStorage.getItem("token_type") || "bearer";
+      state.loadingAuth = false;
     },
   },
 
@@ -102,13 +122,7 @@ const authSlice = createSlice({
         const d = action.payload;
 
         if (d.login) {
-          state.access_token = d.access_token;
-          localStorage.setItem("access_token", d.access_token);
-
-          if (d.refresh_token) {
-            state.refresh_token = d.refresh_token;
-            localStorage.setItem("refresh_token", d.refresh_token);
-          }
+          persistTokens(state, d);
         }
       })
       .addCase(verifyOtp.rejected, (state, action) => {
@@ -124,14 +138,8 @@ const authSlice = createSlice({
         state.loading = false;
         const d = action.payload;
 
-        state.access_token = d.access_token;
         state.user = d.user;
-        localStorage.setItem("access_token", d.access_token);
-
-        if (d.refresh_token) {
-          state.refresh_token = d.refresh_token;
-          localStorage.setItem("refresh_token", d.refresh_token);
-        }
+        persistTokens(state, d);
       })
       .addCase(createProfile.rejected, (state, action) => {
         state.loading = false;

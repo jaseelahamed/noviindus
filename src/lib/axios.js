@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getAccessToken } from "./authToken";
+import { getAccessToken, getTokenType } from "./authToken";
 
 const api = axios.create({
   baseURL: "https://nexlearn.noviindusdemosites.in",
@@ -7,9 +7,21 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token = getAccessToken();
+  const token =
+    getAccessToken() ||
+    (typeof window !== "undefined"
+      ? localStorage.getItem("access_token")
+      : null);
+  const tokenType =
+    getTokenType() ||
+    (typeof window !== "undefined"
+      ? localStorage.getItem("token_type")
+      : "bearer");
+
   if (token && config.headers) {
-    config.headers.Authorization = `Bearer ${token}`;
+    const normalizedType =
+      tokenType.charAt(0).toUpperCase() + tokenType.slice(1).toLowerCase();
+    config.headers.Authorization = `${normalizedType} ${token}`;
   }
   return config;
 });
