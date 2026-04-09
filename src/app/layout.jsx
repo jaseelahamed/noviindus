@@ -1,6 +1,24 @@
 import "./globals.css";
 import { Providers } from "./providers";
 import { Toaster } from "react-hot-toast";
+import localFont from "next/font/local";
+
+const inter = localFont({
+  src: [
+    {
+      path: "./fonts/inter/InterVariable.woff2",
+      style: "normal",
+      weight: "100 900",
+    },
+    {
+      path: "./fonts/inter/InterVariable-Italic.woff2",
+      style: "italic",
+      weight: "100 900",
+    },
+  ],
+  display: "swap",
+  variable: "--font-inter",
+});
 
 export const metadata = {
   title: "Create Next App",
@@ -10,7 +28,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="antialiased">
+      <body className={`${inter.variable} antialiased`}>
         <Providers>
           {children}
           <Toaster position="top-right" reverseOrder={false} />
