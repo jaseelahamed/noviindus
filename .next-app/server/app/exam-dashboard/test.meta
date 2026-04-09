@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/exam-dashboard/layout,_N_T_/exam-dashboard/test/layout,_N_T_/exam-dashboard/test/page,_N_T_/exam-dashboard/test"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/exam-dashboard/test/__PAGE__",
+    "/exam-dashboard/test",
+    "/exam-dashboard",
+    "/_index",
+    "/_head"
+  ]
+}
