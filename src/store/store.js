@@ -7,11 +7,8 @@ import examReducer from "@/store/examSlice";
 const store = configureStore({
   reducer: {
     auth: authReducer,
-    exam: examReducer,   
+    exam: examReducer,
   },
 });
-
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
 
 export default store;

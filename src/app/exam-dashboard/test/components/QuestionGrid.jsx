@@ -8,7 +8,7 @@ export default function QuestionGrid() {
   const dispatch = useAppDispatch();
   const { questions, statusMap, currentIndex } = useAppSelector((s) => s.exam);
 
-  const getColor = (status: string) => {
+  const getColor = (status) => {
     switch (status) {
       case "answered":
         return "bg-green-500 text-white";

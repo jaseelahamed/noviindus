@@ -1,12 +1,6 @@
 // src/store/examSlice.ts
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "@/lib/axios";
-
-export type Answer = {
-  question_id: number;
-  selected_option_id: number | null;
-  marked_for_review?: boolean;
-};
 
 const initialState = {
   questions: [],
@@ -27,7 +21,7 @@ export const fetchQuestions = createAsyncThunk(
     try {
       const res = await api.get("/question/list");
       return res.data;
-    } catch (err: any) {
+    } catch (err) {
       return rejectWithValue(err.response?.data?.message || err.message);
     }
   }
@@ -35,14 +29,14 @@ export const fetchQuestions = createAsyncThunk(
 
 export const submitAnswers = createAsyncThunk(
   "exam/submitAnswers",
-  async (payload: { answers: Answer[] }, { rejectWithValue }) => {
+  async (payload, { rejectWithValue }) => {
     try {
       const fd = new FormData();
       fd.append("answers", JSON.stringify(payload.answers));
 
       const res = await api.post("/answers/submit", fd);
       return res.data;
-    } catch (err: any) {
+    } catch (err) {
       return rejectWithValue(err.response?.data?.message || err.message);
     }
   }
@@ -52,15 +46,11 @@ const examSlice = createSlice({
   name: "exam",
   initialState,
   reducers: {
-    setCurrentIndex(state, action: PayloadAction<number>) {
+    setCurrentIndex(state, action) {
       state.currentIndex = action.payload;
     },
 
-    // Fix setting answer
-    selectOption(
-      state,
-      action: PayloadAction<{ question_id: number; option_id: number }>
-    ) {
+    selectOption(state, action) {
       const { question_id, option_id } = action.payload;
 
       state.answers[question_id] = {
@@ -81,7 +71,7 @@ const examSlice = createSlice({
       })
       .addCase(fetchQuestions.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.payload || "Something went wrong";
       })
 
       .addCase(submitAnswers.pending, (state) => {
@@ -93,7 +83,7 @@ const examSlice = createSlice({
       })
       .addCase(submitAnswers.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.payload || "Something went wrong";
       });
   },
 });

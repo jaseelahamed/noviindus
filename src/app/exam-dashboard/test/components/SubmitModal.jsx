@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 
-export default function SubmitModal({ onSubmit }: { onSubmit: () => void }) {
+export default function SubmitModal({ onSubmit }) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {

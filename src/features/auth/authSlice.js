@@ -3,17 +3,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "@/lib/axios";
 
-interface AuthState {
-  loading: boolean;
-  loadingAuth: boolean;  
-  access_token: string | null;
-  refresh_token: string | null;
-  user: any;
-  mobileForFlow: string | null;
-  error: string | null;
-}
-
-const initialState: AuthState = {
+const initialState = {
   loading: false,
   loadingAuth: true,      
   access_token: null,
@@ -26,13 +16,13 @@ const initialState: AuthState = {
 
 export const sendOtp = createAsyncThunk(
   "auth/sendOtp",
-  async (mobile: string, { rejectWithValue }) => {
+  async (mobile, { rejectWithValue }) => {
     try {
       const form = new FormData();
       form.append("mobile", mobile);
       const res = await api.post("/auth/send-otp", form);
       return { data: res.data, mobile };
-    } catch (e: any) {
+    } catch (e) {
       return rejectWithValue(e.response?.data?.message || "Something went wrong");
     }
   }
@@ -41,14 +31,14 @@ export const sendOtp = createAsyncThunk(
 
 export const verifyOtp = createAsyncThunk(
   "auth/verifyOtp",
-  async ({ mobile, otp }: { mobile: string; otp: string }, { rejectWithValue }) => {
+  async ({ mobile, otp }, { rejectWithValue }) => {
     try {
       const form = new FormData();
       form.append("mobile", mobile);
       form.append("otp", otp);
       const res = await api.post("/auth/verify-otp", form);
       return res.data;
-    } catch (e: any) {
+    } catch (e) {
       return rejectWithValue(e.response?.data?.message || "Something went wrong");
     }
   }
@@ -57,13 +47,13 @@ export const verifyOtp = createAsyncThunk(
 
 export const createProfile = createAsyncThunk(
   "auth/createProfile",
-  async (data: any, { rejectWithValue }) => {
+  async (data, { rejectWithValue }) => {
     try {
       const form = new FormData();
-      Object.entries(data).forEach(([key, value]: any) => form.append(key, value));
+      Object.entries(data).forEach(([key, value]) => form.append(key, value));
       const res = await api.post("/auth/create-profile", form);
       return res.data;
-    } catch (e: any) {
+    } catch (e) {
       return rejectWithValue(e.response?.data?.message || "Something went wrong");
     }
   }
@@ -100,7 +90,7 @@ const authSlice = createSlice({
       })
       .addCase(sendOtp.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.payload || "Something went wrong";
       })
 
       .addCase(verifyOtp.pending, (state) => {
@@ -123,7 +113,7 @@ const authSlice = createSlice({
       })
       .addCase(verifyOtp.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.payload || "Something went wrong";
       })
 
       .addCase(createProfile.pending, (state) => {
@@ -145,7 +135,7 @@ const authSlice = createSlice({
       })
       .addCase(createProfile.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.payload || "Something went wrong";
       });
   },
 });

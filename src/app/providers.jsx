@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { loadTokens } from "@/features/auth/authSlice";
 import { registerTokenGetter } from "@/lib/authToken";
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export function Providers({ children }) {
 
   useEffect(() => {
     store.dispatch(loadTokens());

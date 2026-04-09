@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "@/hooks/reduxHooks";
 import { logout } from "@/features/auth/authSlice";
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default function DashboardLayout({ children }) {
   const router = useRouter();
   const dispatch = useAppDispatch();
 

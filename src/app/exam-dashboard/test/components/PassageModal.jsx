@@ -7,8 +7,8 @@ export default function PassageModal() {
   const [paragraph, setParagraph] = useState("");
 
   useEffect(() => {
-    const handler = (e: any) => {
-      setParagraph(e.paragraph);
+    const handler = (event) => {
+      setParagraph(event.detail?.paragraph || event.paragraph || "");
       setOpen(true);
     };
     window.addEventListener("openPassage", handler);

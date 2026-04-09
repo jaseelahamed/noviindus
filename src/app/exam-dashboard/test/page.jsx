@@ -20,7 +20,7 @@ export default function TestPage() {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const { questions, loading, error, currentIndex, answers } =
+  const { questions, currentIndex, answers, remainingSeconds } =
     useAppSelector((s) => s.exam);
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export default function TestPage() {
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold">Exam Test</h2>
-          <Timer />
+          <Timer remainingSeconds={remainingSeconds} />
         </div>
 
         <div className="mt-6 grid grid-cols-12 gap-4">

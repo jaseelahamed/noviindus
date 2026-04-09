@@ -25,7 +25,7 @@ const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [qualification, setQualification] = useState("");
-  const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [profileImage, setProfileImage] = useState(null);
 
  
   const handleSendOTP = async () => {
@@ -45,7 +45,7 @@ const SignUp = () => {
       } else {
         toast.error(res.data.message);
       }
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err);
     }
   };
@@ -62,7 +62,7 @@ const SignUp = () => {
       if (res.success) {
         if (res.login) {
           toast.success("Login Successful!");
-          router.push("/exam-dashboard"); // ✅ redirect existing user
+          router.push("/exam-dashboard"); 
         } else {
           toast.success("OTP Verified!");
           setStep(3);
@@ -70,7 +70,7 @@ const SignUp = () => {
       } else {
         toast.error(res.message);
       }
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err);
     }
   };
@@ -101,7 +101,7 @@ const SignUp = () => {
       } else {
         toast.error(res.message);
       }
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err);
     }
   };
